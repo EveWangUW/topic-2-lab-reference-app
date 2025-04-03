@@ -33,22 +33,16 @@ pipeline {
     agent any
     
     environment {
-        AZURE_ACR_NAME = 'acrevewang1'       // Your Azure Container Registry name
+        AZURE_ACR_NAME = 'acrevewang1'
         IMAGE_NAME = 'capstone-repo-test-eve-3'
-        TAG = 'latest'
     }
     
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-        
         stage('Build') {
             steps {
                 script {
-                    sh "docker build . -t ${AZURE_ACR_NAME}.azurecr.io/${IMAGE_NAME}:${TAG}"
+                    // Implicit 'latest' tag
+                    sh "docker build . -t ${AZURE_ACR_NAME}.azurecr.io/${IMAGE_NAME}"
                 }
             }
         }
@@ -56,11 +50,8 @@ pipeline {
         stage('Push Image') {
             steps {
                 script {
-                    // Login to Azure Container Registry
                     sh "az acr login --name ${AZURE_ACR_NAME}"
-                    
-                    // Push image (repository auto-created)
-                    sh "docker push ${AZURE_ACR_NAME}.azurecr.io/${IMAGE_NAME}:${TAG}"
+                    sh "docker push ${AZURE_ACR_NAME}.azurecr.io/${IMAGE_NAME}"
                 }
             }
         }
@@ -68,18 +59,13 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Pull the image
-                    sh "docker pull ${AZURE_ACR_NAME}.azurecr.io/${IMAGE_NAME}:${TAG}"
-                    
-                    // Cleanup existing container
+                    sh "docker pull ${AZURE_ACR_NAME}.azurecr.io/${IMAGE_NAME}"
                     sh "docker rm -f ${IMAGE_NAME} || true"
-                    
-                    // Run new container
                     sh """
                         docker run -d \
                         -p 2002:80 \
                         --name ${IMAGE_NAME} \
-                        ${AZURE_ACR_NAME}.azurecr.io/${IMAGE_NAME}:${TAG}
+                        ${AZURE_ACR_NAME}.azurecr.io/${IMAGE_NAME}
                     """
                 }
             }
