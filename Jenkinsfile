@@ -33,8 +33,8 @@ pipeline {
     
     environment {
         ACR_NAME = 'acr1eve2wang'
-        IMAGE_NAME = 'Image1'
-        CONTAINER_NAME = 'Container1'
+        IMAGE_NAME = 'image1eve2wang'
+        CONTAINER_NAME = 'container1evewang'
         HOST_PORT = '2012'
     }
     
