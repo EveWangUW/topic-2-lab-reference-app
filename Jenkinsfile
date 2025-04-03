@@ -32,7 +32,7 @@ pipeline {
     agent any
     
     environment {
-        ACR_NAME = 'ACR1eve2wang'
+        ACR_NAME = 'acr1eve2wang'
         IMAGE_NAME = 'Image1'
         CONTAINER_NAME = 'Container1'
         HOST_PORT = '2012'
