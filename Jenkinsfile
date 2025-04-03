@@ -34,11 +34,18 @@ pipeline {
     environment {
         ACR_NAME = 'acr1eve2wang'
         IMAGE_NAME = 'image1eve2wang'
-        CONTAINER_NAME = 'container1evewang'
-        HOST_PORT = '2012'
+        HTTP_PROXY = 'http://your-proxy:port'  // If needed
+        HTTPS_PROXY = 'http://your-proxy:port'  // If needed
     }
     
     stages {
+        stage('Network Checks') {
+            steps {
+                sh 'ping -c 4 registry-1.docker.io'
+                sh 'curl -I https://registry-1.docker.io'
+            }
+        }
+        
         stage('Checkout') {
             steps {
                 checkout scm
@@ -48,8 +55,15 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    // Implicitly uses 'latest' tag
-                    sh "docker build -t ${ACR_NAME}.azurecr.io/${IMAGE_NAME} ."
+                    sh """
+                        docker build \
+                            --progress=plain \
+                            --no-cache \
+                            --build-arg HTTP_PROXY=$HTTP_PROXY \
+                            --build-arg HTTPS_PROXY=$HTTPS_PROXY \
+                            --ulimit nofile=1024:1024 \
+                            -t ${ACR_NAME}.azurecr.io/${IMAGE_NAME} .
+                    """
                 }
             }
         }
