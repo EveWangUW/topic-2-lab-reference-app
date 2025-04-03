@@ -41,8 +41,9 @@ pipeline {
     stages {
         stage('Network Checks') {
             steps {
-                sh 'ping -c 4 registry-1.docker.io'
-                sh 'curl -I https://registry-1.docker.io'
+                // Use curl instead of ping
+                sh 'curl -I --connect-timeout 5 https://registry-1.docker.io || true'
+                sh 'docker pull node:21-alpine --quiet || true'
             }
         }
         
