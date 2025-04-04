@@ -50,6 +50,10 @@ pipeline {
         stage('Push Image') {
             steps {
                 script {
+                    sh '''
+                        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+                        az --version
+                    '''
                     sh "az acr login --name ${AZURE_ACR_NAME}"
                     sh "docker push ${AZURE_ACR_NAME}.azurecr.io/${IMAGE_NAME}"
                 }
