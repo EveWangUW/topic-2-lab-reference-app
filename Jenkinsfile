@@ -38,18 +38,23 @@ pipeline {
     }
     
     stages {
-        stage('Install Azure CLI') {
+        stage('Checkout') {
             steps {
-                script {
-                    sh '''
-                        curl -sL https://aka.ms/InstallAzureCLIDeb > install.sh
-                        chmod +x install.sh
-                        ./install.sh  # Requires root access
-                        az --version
-                    '''
-                }
+                checkout scm
             }
         }
+        // stage('Install Azure CLI') {
+        //     steps {
+        //         script {
+        //             sh '''
+        //                 curl -sL https://aka.ms/InstallAzureCLIDeb > install.sh
+        //                 chmod +x install.sh
+        //                 ./install.sh  # Requires root access
+        //                 az --version
+        //             '''
+        //         }
+        //     }
+        // }
 
         stage('Build') {
             steps {
