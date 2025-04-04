@@ -41,7 +41,6 @@ pipeline {
         stage('Install Azure CLI') {
             steps {
                 script {
-                    // Install Azure CLI without sudo (Debian/Ubuntu)
                     sh '''
                         curl -sL https://aka.ms/InstallAzureCLIDeb > install.sh
                         chmod +x install.sh
@@ -51,7 +50,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Build') {
             steps {
                 script {
@@ -64,12 +63,24 @@ pipeline {
         stage('Push Image') {
             steps {
                 script {
-                    sh "az acr login --name ${AZURE_ACR_NAME}"
-                    sh "docker push ${AZURE_ACR_NAME}.azurecr.io/${IMAGE_NAME}"
+                    withCredentials([
+                        usernamePassword(
+                            credentialsId: 'azure-acr-service-principal',  // Match the ID you set in Jenkins
+                            usernameVariable: 'AZURE_CLIENT_ID',
+                            passwordVariable: 'AZURE_CLIENT_SECRET'
+                        )
+                    ]) {
+                        // Azure login
+                        sh "az login --service-principal -u \$AZURE_CLIENT_ID -p \$AZURE_CLIENT_SECRET --tenant f6b6dd5b-f02f-441a-99a0-162ac5060bd2"
+                        
+                        // ACR login + Docker push
+                        sh "az acr login --name ${AZURE_ACR_NAME}"
+                        sh "docker push ${AZURE_ACR_NAME}.azurecr.io/${IMAGE_NAME}"
+                    }
                 }
             }
         }
-        
+                
         stage('Deploy') {
             steps {
                 script {
