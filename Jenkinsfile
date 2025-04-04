@@ -38,6 +38,20 @@ pipeline {
     }
     
     stages {
+        stage('Install Azure CLI') {
+            steps {
+                script {
+                    // Install Azure CLI without sudo (Debian/Ubuntu)
+                    sh '''
+                        curl -sL https://aka.ms/InstallAzureCLIDeb > install.sh
+                        chmod +x install.sh
+                        ./install.sh  # Requires root access
+                        az --version
+                    '''
+                }
+            }
+        }
+        
         stage('Build') {
             steps {
                 script {
@@ -50,10 +64,6 @@ pipeline {
         stage('Push Image') {
             steps {
                 script {
-                    sh '''
-                        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-                        az --version
-                    '''
                     sh "az acr login --name ${AZURE_ACR_NAME}"
                     sh "docker push ${AZURE_ACR_NAME}.azurecr.io/${IMAGE_NAME}"
                 }
