@@ -88,7 +88,7 @@ pipeline {
                     sh "docker rm -f ${IMAGE_NAME} || true"
                     sh """
                         docker run -d \
-                        -p 2002:80 \
+                        -p 2003:80 \
                         --name ${IMAGE_NAME} \
                         ${AZURE_ACR_NAME}.azurecr.io/${IMAGE_NAME}
                     """
