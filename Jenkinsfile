@@ -2,8 +2,8 @@ pipeline {
     agent any
     
     environment {
-        AZURE_ACR_NAME = 'acrevewang1'
-        IMAGE_NAME = 'capstone-repo-test-eve-3'
+        AZURE_ACR_NAME = 'labacrdevops'
+        IMAGE_NAME = 'docker-image-devops-1'
     }
     
     stages {
