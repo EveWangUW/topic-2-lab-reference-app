@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         AZURE_ACR_NAME = 'labacrdevops3'
-        IMAGE_NAME = 'docker-image-devops'
+        IMAGE_NAME = 'docker-image-devops-test'
         ACR_LOGIN_SERVER = "${AZURE_ACR_NAME}.azurecr.io"
     }
 
