@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         AZURE_ACR_NAME = 'labacrdevops3'
-        IMAGE_NAME = 'docker-image-devops-1'
+        IMAGE_NAME = 'docker-image-devops'
         ACR_LOGIN_SERVER = "${AZURE_ACR_NAME}.azurecr.io"
     }
 
@@ -33,10 +33,7 @@ pipeline {
                         )
                     ]) {
                         sh """
-                            echo \$ACR_PASS | docker login ${ACR_LOGIN_SERVER} \
-                            -u \$ACR_USER \
-                            --password-stdin
-                            
+                            docker login ${ACR_LOGIN_SERVER} -u \$ACR_USER -p \$ACR_PASS
                             docker push ${ACR_LOGIN_SERVER}/${IMAGE_NAME}
                         """
                     }
