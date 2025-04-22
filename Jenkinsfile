@@ -28,8 +28,8 @@ pipeline {
                     withCredentials([
                         usernamePassword(
                             credentialsId: 'jenkins-acr-cred',  // Match the ID you set in Jenkins
-                            usernameVariable: 'AZURE_CLIENT_ID',
-                            passwordVariable: 'AZURE_CLIENT_SECRET'
+                            usernameVariable: 'ACR_USER',
+                            passwordVariable: 'ACR_PASS'
                         )
                     ]) {
                         sh """
