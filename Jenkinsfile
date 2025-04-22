@@ -33,7 +33,10 @@ pipeline {
                         )
                     ]) {
                         sh """
-                            docker login ${ACR_LOGIN_SERVER} -u \$ACR_USER -p \$ACR_PASS
+                            echo \$ACR_PASS | docker login ${ACR_LOGIN_SERVER} \
+                            -u \$ACR_USER \
+                            --password-stdin
+                            
                             docker push ${ACR_LOGIN_SERVER}/${IMAGE_NAME}
                         """
                     }
