@@ -4,6 +4,7 @@ pipeline {
     environment {
         AZURE_ACR_NAME = 'labacrdevops3'
         IMAGE_NAME = 'docker-image-devops-1'
+        ACR_LOGIN_SERVER = "${AZURE_ACR_NAME}.azurecr.io"
     }
 
     stages {
