@@ -3,7 +3,7 @@ import './App.css';
 function App() {
   return (
     <div className="container">
-      <h1>Hello! My name is Eve Wang - testing! 👋</h1>
+      <h1>Hello! My name is Eve Wang - using the scope map token! 👋</h1>
     </div>
   );
 }
