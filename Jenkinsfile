@@ -45,8 +45,7 @@ pipeline {
             steps {
                 sh "docker pull ${ACR_LOGIN_SERVER}/${IMAGE_NAME}"
                 sh "docker rm -f ${IMAGE_NAME} || true"
-                sh "fuser -k 2003/tcp || true"
-                sh "docker run -d -p 2003:80 --name ${IMAGE_NAME} ${ACR_LOGIN_SERVER}/${IMAGE_NAME}"
+                sh "docker run -d -p 2004:80 --name ${IMAGE_NAME} ${ACR_LOGIN_SERVER}/${IMAGE_NAME}"
             }
         }
     }
